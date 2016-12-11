@@ -31,8 +31,8 @@ app.post('/webhook/', function (req, res) {
         json: true
          }, function (error, response, body) {
            try {
-                  var condition = body.main;
-          sendTextMessage (sender, "Today is " + condition.temp + "Celsius in "+ location);
+                  var weather = body.main;
+          sendTextMessage (sender, " weather is " + weather.temp + "Celsius in "+ location);
         } catch(err) {
           console.error('error caught', err);
           sendTextMessage(sender, "There was an error.");
@@ -44,7 +44,7 @@ app.post('/webhook/', function (req, res) {
         continue
       }
       var text2 = text.split(' ')
-      sendTextMessage(sender, parseInt(text2[0]) + parseInt(text2[1]) )
+      sendTextMessage (sender, parseInt(text2[0]) + parseInt(text2[1]) )
     }
     if (event.postback) {
       let text = JSON.stringify(event.postback)
