@@ -32,7 +32,7 @@ app.post('/webhook/', function (req, res) {
          }, function (error, response, body) {
            try {
                   var weather = body.main;
-          sendTextMessage (sender, " weather is " + weather.temp + " C'  in  "+ location);
+          sendTextMessage (sender, " weather is " + weather.temp + " C'  in  "+ location +"temp_min"+ weather.temp_min":30,"+ " C' "+" temp_max "+ weather.temp_max":30"+ " C' ");
         } catch(err) {
           console.error('error caught', err);
           sendTextMessage(sender, "There was an error.");
