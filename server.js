@@ -4,7 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const token = 'EAAZAZC008CQiIBAONhaOzxs3xiZCP9t621xu3mQ6PXrdIzfdC8fFMZC7ZBN3E1XlHZCuSQXR9jIEBZBuSoI8IEwrbAf0MJHcFLTnSQhyde8jZCyNK35g1KkOaUvdiJTZBHRjZB3UrfZCHAiPrOlhLXh7ks7lJ3SyO95zc2Bv7eQnU56SgZDZD'
+const token = 'EAAZAZC008CQiIBABOMvP8TKRlyZCr8Qhky8hzKdND6pwZAZBDb4YZBcz3rqZBNfqZB26mjavp3hfgKRlYkkj1Rn5ZB3938eP7mYZCaalQZC5bXk3DyFDHgeM3m3v5gpoo2tj9J1JqqBZBacazlfNKIliD20ujiG7Dp4gWIv5NwcBzvWaUwZDZD'
 app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -12,38 +12,39 @@ app.get('/', function (req, res) {
   res.send('test test')
 })
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'nut38853' ) {
+  if (req.query['hub.verify_token'] === 'nut38853') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong token')
 })
-
 app.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging
   for (let i = 0; i < messaging_events.length; i++) {
     let event = req.body.entry[0].messaging[i]
     let sender = event.sender.id
     if (event.message && event.message.text) {
-    let text = event.message.text
-    var location = event.message.text
-          var weatherEndpoint = 'http://api.openweathermap.org/data/2.5/weather?q=' +location+ '&units=metric&appid=7859a2c98ad9c842e6d14f9764d2464a'
-          request({
-            url: weatherEndpoint,
-            json: true
-          }, function(error, response, body) {
-            try {
-              var condition = body.main;
-              sendTextMessage(sender, "Today is " + condition.temp + "Celsius in " + location);
-            } catch(err) {
-              console.error('error caught', err);
-              sendTextMessage(sender, "There was an error.");
-            }
-          }
+      let text = event.message.text
+      var location = event.message.text
+      var  weatherEndpoint = 'http://api.openweathermap.org/data/2.5/weather?q=' +location+ '&units=metric&appid=ea5272e74853f242bc0efa9fef3dd9f3'
+      request({
+        url: weatherEndpoint,
+        json: true
+      } , function (error, response, body) {
+         try {
+          var condition = body.main;
+          sendTextMessage(sender, "Today is " + condition.temp + "Celsius in " + location);
+        } catch(err) {
+          console.error('error caught', err);
+          sendTextMessage(sender, "There was an error.");
+        }
+      })
+
       if (text === 'Generic') {
         sendGenericMessage(sender)
         continue
       }
-      sendTextMessage(sender, 'Text  ' + text.substring(0, 200))
+      var text2 = text.split(' ')
+      sendTextMessage(sender, parseInt(text2[0]) + parseInt(text2[1]) )
     }
     if (event.postback) {
       let text = JSON.stringify(event.postback)
